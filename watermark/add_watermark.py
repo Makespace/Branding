@@ -42,14 +42,14 @@ def add_watermark(img_filepath, logo_filepath, opacity):
     logo = cv.imread(logo_filepath, -1)
     logo_h, logo_w, _ = logo.shape
 
-    # resize the logo to take half the width
-    new_logo_w = round(img_w / 2)
+    # resize the logo to take half the width or height, whichever is smaller
+    new_logo_w = round(min(img_w / 2, img_h / 2 * logo_w / logo_h))
     new_logo_h = round(new_logo_w * logo_h / logo_w)
     new_logo = cv.resize(logo, (new_logo_w, new_logo_h), interpolation = cv.INTER_AREA)
     
-    # Calculate position for the bottom right of the picture
-    pos_x = new_logo_w
-    pos_y = img_h - new_logo_h
+    # Calculate position in center
+    pos_x = round((img_w - new_logo_w) / 2)
+    pos_y = round((img_h - new_logo_h) / 2)
  
     overlay = transparent_overlay(img, new_logo, pos = (pos_x, pos_y))
 
